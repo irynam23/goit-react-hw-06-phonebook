@@ -1,46 +1,21 @@
 import { ContactForm } from './ContactForm/ContactForm';
 import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
-import { useDispatch, useSelector } from 'react-redux';
-import { addContact, deleteContact } from 'redux/contactsSlice';
+import { useSelector } from 'react-redux';
+import { selectContacts } from 'redux/selectors';
 
 export const App = () => {
-  const contacts = useSelector(state => state.contactData.contactsList);
-  const filter = useSelector(state => state.contactData.filter);
-  const dispatch = useDispatch();
+  const contacts = useSelector(selectContacts);
 
-  const handleAddContact = contact => {
-    if (
-      contacts.some(({ name }) => {
-        return name.toLowerCase() === contact.name.toLowerCase();
-      })
-    ) {
-      alert(`${contact.name} is already in contacts`);
-      return;
-    }
-
-    dispatch(addContact(contact));
-  };
-
-  const handleDelete = id => {
-    dispatch(deleteContact(id));
-  };
-
-  const getFilteredContacts = () => {
-    return contacts.filter(({ name }) => name.toLowerCase().includes(filter));
-  };
   return (
     <div>
       <h1>Phonebook</h1>
-      <ContactForm handleAddContact={handleAddContact} />
+      <ContactForm />
       <h2>Contacts</h2>
       {contacts.length ? (
         <>
           <Filter />
-          <ContactList
-            contacts={getFilteredContacts()}
-            handleDelete={handleDelete}
-          />
+          <ContactList />
         </>
       ) : (
         <p>No contacts added</p>
